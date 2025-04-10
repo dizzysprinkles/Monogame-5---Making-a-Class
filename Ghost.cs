@@ -35,6 +35,7 @@ namespace Monogame_5___Making_a_Class
         public void Update(MouseState mouseState)
         {
             _speed = Vector2.Zero;
+
             if (mouseState.X < _location.X)
             {
                 _direction = SpriteEffects.FlipHorizontally;
@@ -42,12 +43,10 @@ namespace Monogame_5___Making_a_Class
             }
             else if (mouseState.X > _location.X)
             {
-                _direction = SpriteEffects.None;
                 _speed.X = 1;
             }
             if (mouseState.Y < _location.Y)
             {
-                _direction = SpriteEffects.FlipHorizontally;
                 _speed.Y = -1;
             }
             else if (mouseState.Y > _location.Y)
@@ -55,7 +54,14 @@ namespace Monogame_5___Making_a_Class
                 _direction = SpriteEffects.None;
                 _speed.Y = 1;
             }
+
+            if (mouseState.LeftButton == ButtonState.Released)
+            {
+                _speed = Vector2.Zero;
+            }
+
             _location.Offset(_speed);
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
