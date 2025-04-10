@@ -42,7 +42,6 @@ namespace Monogame_5___Making_a_Class
 
             generator = new Random();
             ghostTextures = new List<Texture2D>();
-            //screen = Screen.Title;
 
             base.Initialize();
             ghost1 = new Ghost(ghostTextures, new Rectangle(150, 260, 40, 40));
