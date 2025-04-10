@@ -24,6 +24,7 @@ namespace Monogame_5___Making_a_Class
         Random generator;
         Screen screen;
         Rectangle window;
+        Ghost ghost1;
         
         public Game1()
         {
