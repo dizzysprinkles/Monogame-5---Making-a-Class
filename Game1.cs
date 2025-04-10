@@ -20,7 +20,7 @@ namespace Monogame_5___Making_a_Class
 
         List<Texture2D> ghostTextures;
         Texture2D titleBackground, mainBackground, endBackground, marioTexture;
-        MouseState currentMouseState, prevMouseState;
+        MouseState mouseState;
         Random generator;
         Screen screen;
         Rectangle window;
@@ -45,6 +45,7 @@ namespace Monogame_5___Making_a_Class
             //screen = Screen.Title;
 
             base.Initialize();
+            ghost1 = new Ghost(ghostTextures, new Rectangle(150, 260, 40, 40));
         }
 
         protected override void LoadContent()
@@ -65,13 +66,12 @@ namespace Monogame_5___Making_a_Class
 
         protected override void Update(GameTime gameTime)
         {
-            currentMouseState = Mouse.GetState();
+            mouseState = Mouse.GetState();
+            ghost1.Update(mouseState);
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
 
-            prevMouseState = currentMouseState;
             base.Update(gameTime);
         }
 
@@ -82,6 +82,8 @@ namespace Monogame_5___Making_a_Class
             _spriteBatch.Begin();
 
             _spriteBatch.Draw(mainBackground, window, Color.White);
+
+            ghost1.Draw(_spriteBatch);
 
             _spriteBatch.End();
 
