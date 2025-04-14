@@ -32,7 +32,7 @@ namespace Monogame_5___Making_a_Class
 
         }
 
-        public Rectangle Rectangle
+        public Rectangle Rect
         {
             get { return _location; }
         }
@@ -84,6 +84,18 @@ namespace Monogame_5___Making_a_Class
             }
             _location.Offset(_speed);
         }
+        
+
+        // Collision methods that return if the collision is true or not.
+        public bool Contains(Point player) //Contains mouse
+        {
+            return _location.Contains(player);
+        }
+        public bool Intersects(Rectangle player) //intersects a rectangle
+        {
+            return _location.Intersects(player);
+        }
+
 
         public void Draw(SpriteBatch spriteBatch)
         {
