@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 
 namespace Monogame_5___Making_a_Class
 {
@@ -25,7 +26,9 @@ namespace Monogame_5___Making_a_Class
         Random generator;
         Screen screen;
         Rectangle window;
-        Ghost ghost1;
+        //Ghost ghost1;
+        List<Ghost> ghosts;
+        
         
         public Game1()
         {
@@ -37,7 +40,10 @@ namespace Monogame_5___Making_a_Class
         protected override void Initialize()
         {
             screen = Screen.Title;
+            ghosts = new List<Ghost>();
             window = new Rectangle(0,0,800,600);
+
+            IsMouseVisible = false;
 
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.PreferredBackBufferWidth = window.Width;
@@ -46,7 +52,12 @@ namespace Monogame_5___Making_a_Class
             ghostTextures = new List<Texture2D>();
 
             base.Initialize();
-            ghost1 = new Ghost(ghostTextures, new Rectangle(150, 260, 40, 40));
+            
+            for (int i = 0; i < 20; i++)
+            {
+                ghosts.Add(new Ghost(ghostTextures, new Rectangle(generator.Next(0, 700), generator.Next(0, 500), 40, 40)));
+            }
+
         }
 
         protected override void LoadContent()
@@ -63,6 +74,7 @@ namespace Monogame_5___Making_a_Class
             titleBackground = Content.Load<Texture2D>("Images/haunted-title");
             endBackground = Content.Load<Texture2D>("Images/haunted-end-screen");
             mainBackground = Content.Load<Texture2D>("Images/haunted-background");
+            marioTexture = Content.Load<Texture2D>("Images/mario");
         }
 
         protected override void Update(GameTime gameTime)
@@ -79,10 +91,12 @@ namespace Monogame_5___Making_a_Class
             }
             else if (screen == Screen.House)
             {
-                ghost1.Update(gameTime, mouseState);
-                if (ghost1.Contains(mouseState.Position) && mouseState.LeftButton == ButtonState.Pressed)
-                    screen = Screen.End;
-
+                for (int i = 0; i < 20; i++)
+                {
+                    ghosts[i].Update(gameTime, mouseState, ghosts);
+                    if (ghosts[i].Contains(mouseState.Position) && mouseState.LeftButton == ButtonState.Pressed)
+                       screen = Screen.End;
+                }
             }
 
             base.Update(gameTime);
@@ -93,17 +107,21 @@ namespace Monogame_5___Making_a_Class
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-
+           
             if (screen == Screen.Title)
                 _spriteBatch.Draw(titleBackground, window, Color.White);
             else if (screen == Screen.House)
             {
                 _spriteBatch.Draw(mainBackground, window, Color.White);
-                ghost1.Draw(_spriteBatch);
+                for (int i = 0; i < 20; i++)
+                {
+                    ghosts[i].Draw(_spriteBatch);
+                }
             }
             else
                 _spriteBatch.Draw(endBackground, window, Color.White);
 
+            _spriteBatch.Draw(marioTexture, new Rectangle(mouseState.Position.X, mouseState.Position.Y, 20, 20), Color.White);
             _spriteBatch.End();
 
             base.Draw(gameTime);
