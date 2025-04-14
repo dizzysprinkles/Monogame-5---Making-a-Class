@@ -21,6 +21,7 @@ namespace Monogame_5___Making_a_Class
         List<Texture2D> ghostTextures;
         Texture2D titleBackground, mainBackground, endBackground, marioTexture;
         MouseState mouseState;
+        KeyboardState keyboardState;
         Random generator;
         Screen screen;
         Rectangle window;
@@ -35,6 +36,7 @@ namespace Monogame_5___Making_a_Class
 
         protected override void Initialize()
         {
+            screen = Screen.Title;
             window = new Rectangle(0,0,800,600);
 
             _graphics.PreferredBackBufferHeight = window.Height;
@@ -66,10 +68,22 @@ namespace Monogame_5___Making_a_Class
         protected override void Update(GameTime gameTime)
         {
             mouseState = Mouse.GetState();
-            ghost1.Update(gameTime, mouseState);
+            keyboardState = Keyboard.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            if (screen == Screen.Title)
+            {
+                if (keyboardState.IsKeyDown(Keys.Enter))
+                    screen = Screen.House;
 
+            }
+            else if (screen == Screen.House)
+            {
+                ghost1.Update(gameTime, mouseState);
+                if (ghost1.Contains(mouseState.Position) && mouseState.LeftButton == ButtonState.Pressed)
+                    screen = Screen.End;
+
+            }
 
             base.Update(gameTime);
         }
@@ -80,9 +94,15 @@ namespace Monogame_5___Making_a_Class
 
             _spriteBatch.Begin();
 
-            _spriteBatch.Draw(mainBackground, window, Color.White);
-
-            ghost1.Draw(_spriteBatch);
+            if (screen == Screen.Title)
+                _spriteBatch.Draw(titleBackground, window, Color.White);
+            else if (screen == Screen.House)
+            {
+                _spriteBatch.Draw(mainBackground, window, Color.White);
+                ghost1.Draw(_spriteBatch);
+            }
+            else
+                _spriteBatch.Draw(endBackground, window, Color.White);
 
             _spriteBatch.End();
 
