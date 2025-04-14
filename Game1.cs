@@ -66,7 +66,7 @@ namespace Monogame_5___Making_a_Class
         protected override void Update(GameTime gameTime)
         {
             mouseState = Mouse.GetState();
-            ghost1.Update(mouseState);
+            ghost1.Update(gameTime, mouseState);
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 

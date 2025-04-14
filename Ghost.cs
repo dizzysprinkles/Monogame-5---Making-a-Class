@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ namespace Monogame_5___Making_a_Class
         private Rectangle _location;
         private int _textureIndex; //Control what texture is drawn to the screen
         private SpriteEffects _direction;
+        private float _animationSpeed;
+        private float _seconds;
 
         public Ghost(List<Texture2D> textures, Rectangle location)
         {
@@ -24,6 +27,8 @@ namespace Monogame_5___Making_a_Class
             _speed = Vector2.Zero;
             _textureIndex = 0;
             _direction = SpriteEffects.None;
+            _animationSpeed = 0.2f;
+            _seconds = 0f;
 
         }
 
@@ -32,7 +37,7 @@ namespace Monogame_5___Making_a_Class
             get { return _location; }
         }
 
-        public void Update(MouseState mouseState)
+        public void Update(GameTime gameTime, MouseState mouseState)
         {
             _speed = Vector2.Zero;
 
@@ -58,15 +63,31 @@ namespace Monogame_5___Making_a_Class
             if (mouseState.LeftButton == ButtonState.Released)
             {
                 _speed = Vector2.Zero;
+                _textureIndex= 0;
+                _seconds = 0f;
             }
+            else if (_speed != Vector2.Zero)
+            {
+                //Animation
+                _seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_seconds > _animationSpeed)
+                {
+                    _seconds = 0;
+                    _textureIndex++;
+                    if (_textureIndex >= _textures.Count)
+                    {
+                        _textureIndex = 1;
+                    }
+                }
 
+               
+            }
             _location.Offset(_speed);
-
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_textures[0], _location, null,Color.White, 0f, Vector2.Zero, _direction, 1);
+            spriteBatch.Draw(_textures[_textureIndex], _location, null,Color.White, 0f, Vector2.Zero, _direction, 1);
         }
 
 
