@@ -28,6 +28,7 @@ namespace Monogame_5___Making_a_Class
         Rectangle window;
         //Ghost ghost1;
         List<Ghost> ghosts;
+        SpriteFont instructionFont;
         
         
         public Game1()
@@ -75,6 +76,7 @@ namespace Monogame_5___Making_a_Class
             endBackground = Content.Load<Texture2D>("Images/haunted-end-screen");
             mainBackground = Content.Load<Texture2D>("Images/haunted-background");
             marioTexture = Content.Load<Texture2D>("Images/mario");
+            instructionFont = Content.Load<SpriteFont>("Fonts/InstructionFont");
         }
 
         protected override void Update(GameTime gameTime)
@@ -109,7 +111,11 @@ namespace Monogame_5___Making_a_Class
             _spriteBatch.Begin();
            
             if (screen == Screen.Title)
+            {
                 _spriteBatch.Draw(titleBackground, window, Color.White);
+                _spriteBatch.DrawString(instructionFont, "The game ends when you click on a ghost!", new Vector2(10, 200), Color.White);
+            }
+               
             else if (screen == Screen.House)
             {
                 _spriteBatch.Draw(mainBackground, window, Color.White);
